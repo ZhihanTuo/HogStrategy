@@ -4,7 +4,7 @@ from dice import four_sided, six_sided, make_test_dice
 from ucb import main, trace, log_current_line, interact
 import sys
 
-MAX_RECURSION_DEPTH = 1000
+MAX_RECURSION_DEPTH = 4000
 MAX_DICE_ROLLS = 10
 GOAL_SCORE = 100 # The goal of Hog is to score 100 points.
 
@@ -338,6 +338,8 @@ def best_num_dice_to_roll(score, opponent_score):
             best_probability = curr_probability
             best_num_of_dice = num_of_dice
 
+        num_of_dice += 1
+
     return best_num_of_dice
 
 @memoized
@@ -365,6 +367,7 @@ def probability_of_winning_by_rolling_n(score, opponent_score, n):
         possible_score = 1
         while possible_score <= sides * n:
             win_probability += (probability_of_scoring(possible_score, n, sides)) * probability_of_winning_with_turn_end_scores(score + possible_score, opponent_score)
+            possible_score += 1
 
     return win_probability
     

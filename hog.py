@@ -3,6 +3,7 @@
 from dice import four_sided, six_sided, make_test_dice
 from ucb import main, trace, log_current_line, interact
 import sys
+from typing import Callable, Union
 
 MAX_RECURSION_DEPTH = 10000
 MAX_DICE_ROLLS = 10
@@ -290,13 +291,15 @@ def swap_strategy(score, opponent_score):
 # Final Strategy #
 ##########################
 def final_strategy(score, opponent_score):
-    """Write a brief description of your final strategy.
+    """This strategy uses a recursive approach to calculate the optimal number of dice to roll based on:
+    - The current score and opponent_score
+    - Probability of winning for each possible number of dice to roll
 
-    *** YOUR DESCRIPTION HERE ***
+    The optimal number of dice is determined by comparing the probability of winning for each potential option, and choosing the highest 
     """
     return best_num_dice_to_roll(score, opponent_score)
 
-def memoized(func):
+def memoized(func) -> Callable[..., Union[int, float]]:
     """Decorator that caches previously seen results and returns the memoized ver of func
 
     @param: func: a function that computes some result
@@ -316,7 +319,7 @@ def memoized(func):
     return wrapper
 
 @memoized
-def best_num_dice_to_roll(score, opponent_score):
+def best_num_dice_to_roll(score, opponent_score) -> int:
     """Returns the best number of dice to roll on my turn based on score and opponent score
     
     @param score: my score
@@ -343,7 +346,7 @@ def best_num_dice_to_roll(score, opponent_score):
     return best_num_of_dice
 
 @memoized
-def probability_of_winning_by_rolling_n(score, opponent_score, n):
+def probability_of_winning_by_rolling_n(score, opponent_score, n) -> float:
     """Computes the win probability of rolling the dice n times 
 
     @param: score: my score
@@ -373,7 +376,7 @@ def probability_of_winning_by_rolling_n(score, opponent_score, n):
     return win_probability
     
 @memoized
-def probability_of_scoring(k, n, s):
+def probability_of_scoring(k, n, s) -> float:
     """Calculates probability of scoring k points with n s-sided dice
     
     @param k: int: the points to score
@@ -388,7 +391,7 @@ def probability_of_scoring(k, n, s):
     return number_of_ways_to_score(k, n, s) / pow(s, n)
 
 @memoized
-def probability_of_winning_with_turn_end_scores(score, opponent_score):
+def probability_of_winning_with_turn_end_scores(score, opponent_score) -> float:
     """Calculates the probability of winning if I end my turn with score and opponent has opponent_score
     
     @param score: int: my score
@@ -411,7 +414,7 @@ def probability_of_winning_with_turn_end_scores(score, opponent_score):
     return 1 - probability_of_opponent_winning
 
 @memoized    
-def number_of_ways_to_score(k, n, s):
+def number_of_ways_to_score(k, n, s) -> int:
     """Calculates the number of ways that k can be scored by rolling n
     s-sided dice without incurring the Pig Out Rule
 

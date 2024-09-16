@@ -4,7 +4,7 @@ from dice import four_sided, six_sided, make_test_dice
 from ucb import main, trace, log_current_line, interact
 import sys
 
-MAX_RECURSION_DEPTH = 4000
+MAX_RECURSION_DEPTH = 10000
 MAX_DICE_ROLLS = 10
 GOAL_SCORE = 100 # The goal of Hog is to score 100 points.
 
@@ -352,9 +352,10 @@ def probability_of_winning_by_rolling_n(score, opponent_score, n):
 
     @return: the probability of winning 
     """
-    free_bacon_score = score + max(opponent_score % 10, opponent_score // 10) + 1
+    free_bacon_score = max(opponent_score % 10, opponent_score // 10) + 1
     sides = 6
-    if select_dice(score, opponent_score) == four_sided:
+    # Hog wild 
+    if (score + opponent_score) % 7 == 0:
         sides = 4
     win_probability = 0
     
@@ -363,7 +364,7 @@ def probability_of_winning_by_rolling_n(score, opponent_score, n):
         turn_score = free_bacon_score
         win_probability = probability_of_winning_with_turn_end_scores(score + turn_score, opponent_score)
     else:
-        # Iterate over all possible scores, 
+        # Iterate over all possible scores to calculate the probability of winning
         possible_score = 1
         while possible_score <= sides * n:
             win_probability += (probability_of_scoring(possible_score, n, sides)) * probability_of_winning_with_turn_end_scores(score + possible_score, opponent_score)
@@ -396,13 +397,13 @@ def probability_of_winning_with_turn_end_scores(score, opponent_score):
     @return: the probability of winning when I end my turn with score and opponent has opponent_score
 
     """
+    # Swine swap
+    if score * 2 == opponent_score or opponent_score * 2 == score:
+        score, opponent_score = opponent_score, score
     if score >= GOAL_SCORE:
         return 1
     elif opponent_score >= GOAL_SCORE:
         return 0
-    # Swine swap
-    if score * 2 == opponent_score or opponent_score * 2 == score:
-        score, opponent_score = opponent_score, score
     # Assume opponent's strategy is optimal
     opponent_num_rolls = best_num_dice_to_roll(opponent_score, score)
     probability_of_opponent_winning = probability_of_winning_by_rolling_n(opponent_score, score, opponent_num_rolls)
@@ -418,9 +419,8 @@ def number_of_ways_to_score(k, n, s):
     @param n: int: the number of dice rolls 0 <= 0 <= 10
     @param s: int: the sides of dice 4 or 6
 
-    @return: number of ways to score k with n s-sided dice   
-    
-    >>> number_of_ways_to_score()
+    @return: number of ways to score k with n s-sided dice
+
     """
     if n == 0:
         if k == 0:
@@ -428,7 +428,7 @@ def number_of_ways_to_score(k, n, s):
         return 0
 
     ways, dice = 0, 2
-    while dice < s + 1:
+    while dice <= s:
         ways += number_of_ways_to_score(k - dice, n - 1, s)
         dice += 1
 

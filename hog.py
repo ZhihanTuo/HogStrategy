@@ -374,21 +374,6 @@ def probability_of_winning_by_rolling_n(score, opponent_score, n) -> float:
             possible_score += 1
 
     return win_probability
-    
-@memoized
-def probability_of_scoring(k, n, s) -> float:
-    """Calculates probability of scoring k points with n s-sided dice
-    
-    @param k: int: the points to score
-    @param n: int: the number of dice rolls 0 <= 0 <= 10
-    @param s: int: the sides of dice 4 or 6
-
-    @return: probability of scoring k points with n s-sided dice
-
-    """
-    if k == 1:
-        return 1 - pow(s - 1, n) / pow(s, n)
-    return number_of_ways_to_score(k, n, s) / pow(s, n)
 
 @memoized
 def probability_of_winning_with_turn_end_scores(score, opponent_score) -> float:
@@ -436,6 +421,21 @@ def number_of_ways_to_score(k, n, s) -> int:
         dice += 1
 
     return ways
+
+@memoized
+def probability_of_scoring(k, n, s) -> float:
+    """Calculates probability of scoring k points with n s-sided dice
+    
+    @param k: int: the points to score
+    @param n: int: the number of dice rolls 0 <= 0 <= 10
+    @param s: int: the sides of dice 4 or 6
+
+    @return: probability of scoring k points with n s-sided dice
+
+    """
+    if k == 1:
+        return 1 - pow(s - 1, n) / pow(s, n)
+    return number_of_ways_to_score(k, n, s) / pow(s, n)
 
 ##########################
 # Command Line Interface #

@@ -290,6 +290,8 @@ def swap_strategy(score, opponent_score):
 ##########################
 # Final Strategy #
 ##########################
+# Algorithm inspired by the following blog post:
+# Source: https://old.paulbramsen.com/archives/32
 def final_strategy(score, opponent_score):
     """This strategy uses a recursive approach to calculate the optimal number of dice to roll based on:
     - The current score and opponent_score
@@ -398,6 +400,8 @@ def probability_of_winning_with_turn_end_scores(score, opponent_score) -> float:
 
     return 1 - probability_of_opponent_winning
 
+# The following functions are derived from Professor John DeNero's fa13 Lecture 8 Video 5 on winning Hog
+# Source: https://youtu.be/xqRosBPbUXI?si=F5O5MSTI_nyr3sfK  
 @memoized    
 def number_of_ways_to_score(k, n, s) -> int:
     """Calculates the number of ways that k can be scored by rolling n
